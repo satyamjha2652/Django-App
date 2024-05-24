@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+  <style>
+    .home-container{
+      display: grid;
+      grid-template-columns: 1fr 3fr;
+    }
+    .center {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+  </style>
+
+    <nav class="navbar navbar-light bg-light">
+        <div class="container-fluid">
+          <a class="navbar-brand">StudyBud</a>
+          <form method="GET" action="{% url 'home_page' %}" class="d-flex">
+            <input class="form-control me-2" type="search" name="q"  placeholder="Search Rooms..." aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+            {% if request.user.is_authenticated %}
+                <li><a href="/logout">logout</a></li>
+            
+            {% else %}
+            <li><a href="/login">login</a></li>
+
+            {% endif %}
+            <hr>
+            
+          </form>
+
+      </nav>
+      <hr>
+      <h2>
+        <a href="/create_room"> create_room</a> </div>
+      </h2>
+
+      <hr>
+
+      <div class="home-container">
+      
+        
+      <div>
+Browse Topics
+          <div>
+            <a href="{% url 'home_page' %}"> All</a>
+          </div>
+          {% for obj2 in topics %}
+          <div> <a href="{% url 'home_page' %}?q={{obj2.name}}">{{obj2.name}}</a></div>
+          {% endfor %}
+      </div>
+
+      <div class="center">
+      {% for obj in query_set %}
+
+      <div> {{count_query}} rooms available </div>
+      {% if request.user == obj.host %}
+      <div> <a href="/update_room/{{obj.id}}/"> Edit </a> </div>
+      <div> <a href="/delete_room/{{obj.id}}/"> Delete </a> </div>
+      {% endif %}
+        <div> <a href=""> @{{obj.host}}</a> </div>
+        <div> <a>{{obj.topic}}</a> </div> 
+        <div> <a href="/room_page/{{obj.id}}/">{{obj.name}}</a> </div>
+        <div> <a>{{obj.description}}</a> </div>
+        <div> <a>{{obj.topic}}</a> </div> 
+        <hr>
+
+      {% endfor %}
+
+      <!-- {% for obj1 in users %}
+      <div> {{obj1.username}}</div>
+      {% endfor %}
+
+      {% for obj2 in topics %}
+      <div> {{obj2.name}}</div>
+      {% endfor %} -->
+
+      </div>
+
+      </div>
+    
+</body>
+</html>
